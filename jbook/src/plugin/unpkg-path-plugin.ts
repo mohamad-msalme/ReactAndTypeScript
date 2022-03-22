@@ -26,10 +26,10 @@ export const unpkgPathPlugin = () => {
        * handel main file of a module 
        */
       build.onResolve({ filter: /.*/ }, (args: esbuild.OnResolveArgs) => {
-          return {
-            namespace: 'a',
-            path: `https://unpkg.com/${args.path}`
-          }
+        return {
+          namespace: 'a',
+          path: `https://unpkg.com/${args.path}`
+        }
       });
     },
   };
