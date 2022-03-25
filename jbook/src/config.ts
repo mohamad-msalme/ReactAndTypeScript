@@ -1,6 +1,20 @@
-import { ServiceOptions } from "esbuild-wasm";
 
-export const serviceOptions: ServiceOptions = {
-  worker: true,
-  wasmURL: 'https://unpkg.com/esbuild-wasm@0.8.27/esbuild.wasm'
-};
+export const HTML = `
+<html>
+  <head></head>
+  <body>
+    <div id='root'></div>
+    <script>
+      window.addEventListener('message', (event) => {
+        try {
+          eval(event.data);
+        } catch (error) {
+          const root = document.querySelector('#root');
+          root.innerHTML = '<div style="color: red;"><h4>Runtime Error</h4>' +error + '</div>'
+          console.error(error);
+        }
+      }, false);
+    </script>
+  </body>
+</html>
+`;
