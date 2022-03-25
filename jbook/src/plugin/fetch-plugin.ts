@@ -6,14 +6,14 @@ const fileCache = localforage.createInstance({
   name: 'filecache',
 });
 
-export const fetchPlugin = (inputCode: string) => {
+export const fetchPlugin = (inputCode: string): esbuild.Plugin => {
   return {
     name: 'fetch-plugin',
-    setup(build: esbuild.PluginBuild) {
+    setup(build: esbuild.PluginBuild): void {
       /**
        * 
        */
-      build.onLoad({ filter: /(^index\.js$)/ }, () => {
+      build.onLoad({ filter: /(^index\.js$)/ }, (): esbuild.OnLoadResult => {
         return {
           loader: 'jsx',
           contents: inputCode,
@@ -30,7 +30,7 @@ export const fetchPlugin = (inputCode: string) => {
        * 
        */
       build.onLoad({ filter: /.css$/ }, async (args: esbuild.OnLoadArgs) => {
-        const { data, request } = await axios.get(args.path);
+        const { data, request } = await axios.get<string>(args.path);
         const escaped = data.replace(/\n/g, '').replace(/"/g, '\\"').replace(/'/g, "\\'");
         const contents =`
           const style = document.createElement('style');
