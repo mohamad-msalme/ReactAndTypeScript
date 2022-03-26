@@ -16,6 +16,10 @@ const buildOptions: esbuild.BuildOptions = {
     global: 'window',
   }
 }
+interface BuildResult {
+  code: string;
+  err: string;
+}
 
 const useStartEsbuildService = () => {
   // State
@@ -35,13 +39,26 @@ const useStartEsbuildService = () => {
    * @returns 
    */
   const build = async (code: string) => {
-    const result = await service.current?.build({...buildOptions, plugins: [unpkgPathPlugin(), fetchPlugin(code)]});
-    if (result?.outputFiles) {
-      return result.outputFiles[0].text;
+    try {
+      const result = await service.current?.build({...buildOptions, plugins: [unpkgPathPlugin(), fetchPlugin(code)]});
+      debugger;
+      if (result?.outputFiles) {
+        return {
+          code: result?.outputFiles[0]?.text,
+          err: ''
+        } as BuildResult
+      }
+    } catch (_error) {
+      const error = _error as { message: string};
+      debugger;
+      return {
+        code: '',
+        err: error.message,
+      } as BuildResult
     }
-    return null;
   }
 
   return React.useMemo(() => build, [])
 }
 export default useStartEsbuildService;
+

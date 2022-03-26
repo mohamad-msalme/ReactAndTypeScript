@@ -1,9 +1,9 @@
 import React from 'react';
-import CodeCell from './CodeCell';
+import { CodeCell } from './';
 
 const App: React.FC = () => {
   return (
-    <CodeCell />
+      <CodeCell />    
   )
 }
 
