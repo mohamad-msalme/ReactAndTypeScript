@@ -3,7 +3,7 @@ import { CodeCell, TextEditor } from './';
 
 const App: React.FC = () => {
   return (
-      <TextEditor />    
+      <CodeCell />    
   )
 }
 
