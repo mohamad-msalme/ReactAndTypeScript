@@ -1,39 +1,54 @@
 import React from "react";
+import { Cell } from "../../state/types";
 import { DEBOUNCE } from "../../config";
-import {useStartEsbuildService} from "../../hooks/index";
-import { Resizable, CodeEditor, Perview } from '../';
+import { Resizable, Spinner } from '../../shared';
+import { CodeEditor, Perview } from '../';
+import { useStartEsbuildService, useActions, useTypedSelector } from "../../hooks";
 import './CodeCell.css'
 // npm view react dist.tarball
-const CodeCell:React.FC = () => {
+interface CodeCellProps {
+  cell: Cell
+}
+const CodeCell:React.FC<CodeCellProps> = ({cell}) => {
   /**
    * State
    */
-  const [ code, setCode ] = React.useState<string>('');
-  const [error, setError] = React.useState<string>('');
-  const [ input, setInput ] = React.useState<string>('const a = 1;');
   const bundel = useStartEsbuildService();
+  const { updateCell, bundleCompleteAction, bundleStartAction } = useActions();
+  const bundelStateCellById = useTypedSelector((state) => state.bundles[cell.id]);
+  const createBundel = React.useCallback( async () => {
+      bundleStartAction(cell.id);
+      const result = await bundel(cell.content);
+        bundleCompleteAction(cell.id, {
+          loading: false,
+          code: result?.code || '',
+          err: result?.err || ''
+        })
+  }, [cell.id, cell.content, bundel, bundleStartAction, bundleCompleteAction]);
   
   React.useEffect(() => {
-    // Debounce 
-    const timerId = setTimeout( async () => {
-      if (input) {
-        const result = await bundel(input);
-        if (result) {
-          setCode(result.code);
-          setError(result.err);
-        }
-      }
-    }, DEBOUNCE);
+    if (!bundelStateCellById) {
+      createBundel();
+      return;
+    }
+    const timerId = setTimeout( createBundel, DEBOUNCE);
     return () => clearTimeout(timerId);
-  }, [bundel, input]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [createBundel]);
 
   return (
     <Resizable direction='vertical'>
       <div className="code-cell-wrapper">
         <Resizable direction='horizontal'>
-          <CodeEditor initialValue={input} onChange={(value: string) => setInput(value)}/>
+          <CodeEditor initialValue={cell.content} onChange={(value: string) => updateCell(cell.id, value) }/>
         </Resizable>
-        <Perview code={code} codeState={error} />
+        <div className="code-cell-preview-wrapper">
+        { 
+          !bundelStateCellById || bundelStateCellById.loading
+          ? <Spinner />
+          : <Perview code={bundelStateCellById.code} codeState={bundelStateCellById.err}/>
+        }
+        </div>
       </div>
     </Resizable>
   )

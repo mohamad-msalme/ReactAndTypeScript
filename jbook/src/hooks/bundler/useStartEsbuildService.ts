@@ -50,7 +50,6 @@ const useStartEsbuildService = () => {
       }
     } catch (_error) {
       const error = _error as { message: string};
-      debugger;
       return {
         code: '',
         err: error.message,

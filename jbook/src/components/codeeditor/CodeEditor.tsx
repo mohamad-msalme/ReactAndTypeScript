@@ -1,8 +1,8 @@
 import React from "react";
-import MonacoEditor, { EditorDidMount } from '@monaco-editor/react';
-import prettier from 'prettier';
 import parser from 'prettier/parser-babel';
+import prettier from 'prettier';
 import { editor } from "monaco-editor";
+import MonacoEditor, { EditorDidMount } from '@monaco-editor/react';
 import './CodeEditor.css';
 
 interface CodeEditorProps {

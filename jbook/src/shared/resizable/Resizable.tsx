@@ -11,7 +11,7 @@ interface Props  {
   direction: 'vertical' | 'horizontal'
 }
 
-const Resizable: React.FC<Props> = ({direction, children}) => {
+export const Resizable: React.FC<Props> = ({direction, children}) => {
 
   const [innerHeight, setInnerHeight] = React.useState<number>(window.innerHeight);
   const [innerWidth, setInnerWidth] = React.useState<number>(window.innerWidth);
@@ -60,5 +60,3 @@ const Resizable: React.FC<Props> = ({direction, children}) => {
 
   return <ResizableBox  {...resizableBoxProps[direction]}>{children}</ResizableBox>
 }
-
-export default Resizable;

@@ -1,10 +1,6 @@
 import React from 'react';
-import { CodeCell, TextEditor } from './';
+import { CellList } from './';
 
-const App: React.FC = () => {
-  return (
-      <CodeCell />    
-  )
-}
+const App: React.FC = () => <CellList />
 
 export default App;

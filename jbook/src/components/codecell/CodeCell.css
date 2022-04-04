@@ -1,5 +1,10 @@
 .code-cell-wrapper {
-  height: 100%;
+  height: calc(100% - 10px);
   display: flex;
   flex-direction: row;
+}
+.code-cell-preview-wrapper {
+  height: 100%;
+  flex-grow: 1;
+  background-color: white;
 }

@@ -1,21 +1,25 @@
-import React from 'react';
-import MDEditor from '@uiw/react-md-editor';
 import './textEditor.css';
+import React from 'react';
+import { Cell } from '../../state/types';
+import MDEditor from '@uiw/react-md-editor';
+import { useActions } from '../../hooks';
 interface Modes {
   editMode: () => JSX.Element;
   readMode: () => JSX.Element;
 }
+interface TextEditorProps {
+  cell: Cell
+}
+const TextEditor: React.FC<TextEditorProps> = ({ cell }) => {
 
-const TextEditor: React.FC = () => {
-
-  const [input, setInput] = React.useState<string>();
   const [mode, setMode] = React.useState<'editMode' | 'readMode'>('readMode');
   const ref = React.useRef<HTMLDivElement | null>(null);
+  const { updateCell } = useActions();
   const modes: Modes = {
     editMode: () => {
       return (
         <div className='text-editor' ref={ref}>
-          <MDEditor value={input} onChange={setInput} />
+          <MDEditor value={cell.content} onChange={(value) => updateCell(cell.id, value || '')} />
         </div>
       )
     },
@@ -23,7 +27,7 @@ const TextEditor: React.FC = () => {
       return (
         <div className='text-editor card' onClick={() => setMode('editMode')}>
           <div className='card-content'>
-            <MDEditor.Markdown source={input || '# Header'} />
+            <MDEditor.Markdown source={`${cell.content || 'Click to edit'}`} />
           </div>
         </div>
       )
