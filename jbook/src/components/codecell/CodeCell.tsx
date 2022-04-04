@@ -3,7 +3,7 @@ import { Cell } from "../../state/types";
 import { DEBOUNCE } from "../../config";
 import { Resizable, Spinner } from '../../shared';
 import { CodeEditor, Perview } from '../';
-import { useStartEsbuildService, useActions, useTypedSelector } from "../../hooks";
+import { useStartEsbuildService, useActions, useTypedSelector, useCumulativeCode } from "../../hooks";
 import './CodeCell.css'
 // npm view react dist.tarball
 interface CodeCellProps {
@@ -14,27 +14,19 @@ const CodeCell:React.FC<CodeCellProps> = ({cell}) => {
    * State
    */
   const bundel = useStartEsbuildService();
-  const { updateCell, bundleCompleteAction, bundleStartAction } = useActions();
+  const { updateCell } = useActions();
   const bundelStateCellById = useTypedSelector((state) => state.bundles[cell.id]);
-  const createBundel = React.useCallback( async () => {
-      bundleStartAction(cell.id);
-      const result = await bundel(cell.content);
-        bundleCompleteAction(cell.id, {
-          loading: false,
-          code: result?.code || '',
-          err: result?.err || ''
-        })
-  }, [cell.id, cell.content, bundel, bundleStartAction, bundleCompleteAction]);
-  
+  const cumulativeCode = useCumulativeCode(cell.id);
+
   React.useEffect(() => {
     if (!bundelStateCellById) {
-      createBundel();
+      bundel(cumulativeCode.join('\n'), cell.id);
       return;
     }
-    const timerId = setTimeout( createBundel, DEBOUNCE);
+    const timerId = setTimeout( () => bundel(cumulativeCode.join('\n'), cell.id), DEBOUNCE);
     return () => clearTimeout(timerId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [createBundel]);
+  }, [cumulativeCode.join('\n'), cell.id]);
 
   return (
     <Resizable direction='vertical'>

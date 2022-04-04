@@ -1,6 +1,8 @@
 import React from 'react';
 import * as esbuild from 'esbuild-wasm'
+import { useActions } from '../index';
 import { fetchPlugin, unpkgPathPlugin } from './plugin';
+
 
 const serviceOptions: esbuild.ServiceOptions = {
   worker: true,
@@ -16,14 +18,12 @@ const buildOptions: esbuild.BuildOptions = {
     global: 'window',
   }
 }
-interface BuildResult {
-  code: string;
-  err: string;
-}
 
 const useStartEsbuildService = () => {
   // State
   const service = React.useRef<esbuild.Service>();
+  const { bundleCompleteAction, bundleStartAction } = useActions();
+
   // Side effect functions
   React.useEffect(() => {
     startService();
@@ -38,22 +38,22 @@ const useStartEsbuildService = () => {
    * @param code : string
    * @returns 
    */
-  const build = async (code: string) => {
+  const build = async (code: string, cellId: string) => {
     try {
+      bundleStartAction(cellId);
       const result = await service.current?.build({...buildOptions, plugins: [unpkgPathPlugin(), fetchPlugin(code)]});
-      debugger;
-      if (result?.outputFiles) {
-        return {
-          code: result?.outputFiles[0]?.text,
-          err: ''
-        } as BuildResult
-      }
+      bundleCompleteAction(cellId, {
+        loading: false,
+        code: result &&  result.outputFiles ? result.outputFiles[0].text : '',
+        err: ''
+      })
     } catch (_error) {
       const error = _error as { message: string};
-      return {
+      bundleCompleteAction(cellId, {
+        loading: false,
         code: '',
-        err: error.message,
-      } as BuildResult
+        err: error.message
+      })
     }
   }
 
