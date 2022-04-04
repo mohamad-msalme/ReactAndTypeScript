@@ -20,13 +20,13 @@ const CodeCell:React.FC<CodeCellProps> = ({cell}) => {
 
   React.useEffect(() => {
     if (!bundelStateCellById) {
-      bundel(cumulativeCode.join('\n'), cell.id);
+      bundel(cumulativeCode, cell.id);
       return;
     }
-    const timerId = setTimeout( () => bundel(cumulativeCode.join('\n'), cell.id), DEBOUNCE);
+    const timerId = setTimeout( () => bundel(cumulativeCode, cell.id), DEBOUNCE);
     return () => clearTimeout(timerId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cumulativeCode.join('\n'), cell.id]);
+  }, [cumulativeCode, cell.id]);
 
   return (
     <Resizable direction='vertical'>
