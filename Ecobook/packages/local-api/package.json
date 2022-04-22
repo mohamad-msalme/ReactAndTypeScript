@@ -1,6 +1,6 @@
 {
   "name": "@eco-note/local-api",
-  "version": "1.0.0",
+  "version": "0.0.1-alpha.0",
   "description": "",
   "main": "dist/index.js",
   "files": [
@@ -23,9 +23,9 @@
     "typescript": "^4.6.3"
   },
   "dependencies": {
+    "@eco-note/local-client": "^0.1.0",
     "cors": "^2.8.5",
     "express": "^4.17.3",
-    "http-proxy-middleware": "^2.0.6",
-    "@eco-note/local-client": "^0.1.0"
+    "http-proxy-middleware": "^2.0.6"
   }
 }
