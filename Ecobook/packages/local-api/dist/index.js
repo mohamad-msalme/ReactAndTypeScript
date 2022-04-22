@@ -19,7 +19,7 @@ const serve = (port, filename, dir, useProxy) => {
         }));
     }
     else {
-        const pathPackage = require.resolve('local-client/build/index.html');
+        const pathPackage = require.resolve('@eco-note/local-client/build/index.html');
         app.use(express_1.default.static(path_1.default.dirname(pathPackage)));
     }
     return new Promise((resolve, reject) => {

@@ -13,7 +13,7 @@ export const serve = (port: number, filename: string, dir: string, useProxy: boo
       logLevel: 'silent',
     }))
   } else {
-    const pathPackage = require.resolve('local-client/build/index.html');
+    const pathPackage = require.resolve('@eco-note/local-client/build/index.html');
     app.use(express.static(path.dirname(pathPackage)));
   }
   
