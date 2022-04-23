@@ -1,6 +1,8 @@
 ## Eco-Book
 **This is an  interactive coding environment, You can write JavaScript, see it executed, and write comprehensive using markdown**
 
+- to start an application lease write this command `npx eco-note serve <filename>`
+
 - Click any text cell (including this one ) to edit
 
 - The code in each code editor is all joined together into one file. if you define a variable in cell #1, you can refer to it in any following cell.
