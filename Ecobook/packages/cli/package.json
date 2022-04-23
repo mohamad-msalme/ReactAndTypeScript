@@ -1,6 +1,6 @@
 {
   "name": "eco-note",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "",
   "files": [
     "dist"
@@ -17,8 +17,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@eco-note/local-api": "^0.0.1-alpha.1",
-    "@eco-note/local-client": "^0.0.1-alpha.0"
+    "@eco-note/local-api": "^0.0.1",
+    "@eco-note/local-client": "^0.0.1"
   },
   "devDependencies": {
     "@types/node": "^17.0.23",
