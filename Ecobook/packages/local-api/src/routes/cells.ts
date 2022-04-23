@@ -58,7 +58,8 @@ export const createCellsRouter = (fileName: string, dir: string) => {
       if (error.code === 'ENOENT') {
         // Add code to create file and add default cells 
         await fs.writeFile(fullPath, JSON.stringify(defaultCells), 'utf-8');
-        res.send([]);
+        const result = await fs.readFile(fullPath, { encoding: 'utf-8'});
+        res.send(JSON.parse(result));
       } else {
         throw _error;
       }

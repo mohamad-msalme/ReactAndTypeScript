@@ -69,7 +69,8 @@ const createCellsRouter = (fileName, dir) => {
             if (error.code === 'ENOENT') {
                 // Add code to create file and add default cells 
                 yield promises_1.default.writeFile(fullPath, JSON.stringify(defaultCells), 'utf-8');
-                res.send([]);
+                const result = yield promises_1.default.readFile(fullPath, { encoding: 'utf-8' });
+                res.send(JSON.parse(result));
             }
             else {
                 throw _error;
